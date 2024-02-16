@@ -1,95 +1,75 @@
-import Image from "next/image";
+"use client";
+import { useEffect } from "react";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
 import styles from "./page.module.css";
+import img from "../src/img.png";
+import Image from "next/image";
+import img2 from "../src/prueba.png";
 
 export default function Home() {
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.defaults({ ease: "none" });
+
+    let tl = gsap.timeline();
+    tl.to(`.${styles.divs}`, { xPercent: 100 });
+    tl.to(`.${styles.divs2}`, { xPercent: -100 }, 0); // Reproduce la animación de divs2 simultáneamente
+    tl.to(`.${styles.divs3}`, { xPercent: 100 }, 0);
+    tl.from(`.${styles.img}`, { yPercent: -100 }, 1);
+    tl.from(`.${styles.seccion3}`, { yPercent: 100, duration: 2 });
+    tl.from(`.${styles.seccion4}`, { yPercent: 100, duration: 2 });
+    tl.from(`.${styles.img2}`, { scale: 10, duration: 2 });
+    tl.to(`.${styles.img2}`, { xPercent: -100, duration: 2 });
+
+    let ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        animation: tl,
+        trigger: `.${styles.container_sections}`,
+        start: "top top",
+        end: "+=4000",
+        markers: true,
+        scrub: 2,
+        pin: true,
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <section>
+      <main className={styles.container_sections}>
+        <section className={` ${styles.seccion1}`}>
+          <div className={styles.divs} />
+          <div className={styles.divs2} />
+          <div className={styles.divs3} />
+        </section>
+        <section className={` ${styles.seccion2}`}>
+          <Image className={styles.img} src={img} alt="img" />
+          <h2>seccion 2</h2>
+        </section>
+        <section className={` ${styles.seccion3}`}>
+          <h2>seccion 3</h2>
+        </section>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+        <section className={` ${styles.seccion4}`}>
+          <div className={styles.container_text}>
+            <h2>seccion 4</h2>
+            <h2>seccion 4</h2>
+            <h2>seccion 4</h2>
+          </div>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+          <section className={` ${styles.seccion5}`}>
+            <div className={styles.container_image}>
+              <Image className={styles.img2} src={img2} alt="img" />
+            </div>
+            {/* 
+            <div className={styles.container_semiSection}></div> */}
+          </section>
+        </section>
+      </main>
+    </section>
   );
 }
